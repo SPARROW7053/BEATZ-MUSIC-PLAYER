@@ -1,0 +1,15 @@
+[build]
+  functions = "netlify/functions"
+
+# Route API calls to the serverless function
+[[redirects]]
+  from = "/api/jiosaavn"
+  to = "/.netlify/functions/jiosaavn-proxy"
+  status = 200
+  force = true
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
