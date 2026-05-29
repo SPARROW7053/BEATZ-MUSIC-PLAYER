@@ -195,39 +195,60 @@ const Navbar = ({ onOpenSidebar }) => {
       </div>
 
       {/* ── Right Profile / Buttons ── */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2.5 sm:gap-4">
         {/* Profile Info */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-white/10 shadow-lg">
-            <img
-              src="/covers/molly_hunter.png"
-              alt="Molly Hunter Avatar"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="text-left leading-tight">
-            <h3 className="text-sm font-bold text-white tracking-wide">Molly Hunter</h3>
-            <span className="inline-block mt-0.5 px-2 py-0.5 text-[9px] font-extrabold text-[#14b8a6] bg-[#14b8a6]/10 border border-[#14b8a6]/15 rounded-full select-none">
-              Premium
-            </span>
-          </div>
-        </div>
+        {currentUser ? (
+          <NavLink
+            to="/profile"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer group animate-fadeIn"
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-white/10 shadow-lg bg-[#17181f] flex items-center justify-center">
+              {currentUser.photoURL ? (
+                <img
+                  src={currentUser.photoURL}
+                  alt={currentUser.displayName || 'User'}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={18} className="text-gray-400" />
+              )}
+            </div>
+            <div className="text-left leading-tight hidden md:block">
+              <h3 className="text-sm font-bold text-white tracking-wide truncate max-w-[120px] group-hover:text-[#ff9500] transition-colors">
+                {currentUser.displayName || currentUser.email?.split('@')[0] || 'User'}
+              </h3>
+              <span className="inline-block mt-0.5 px-2 py-0.5 text-[9px] font-extrabold text-[#14b8a6] bg-[#14b8a6]/10 border border-[#14b8a6]/15 rounded-full select-none">
+                Premium
+              </span>
+            </div>
+          </NavLink>
+        ) : (
+          <NavLink
+            to="/login"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#ff9500] to-[#ff5e00] text-white hover:scale-105 transition-all shadow-[0_4px_15px_rgba(255,94,0,0.3)] active:scale-95 cursor-pointer shrink-0 animate-fadeIn"
+          >
+            <User size={13} />
+            <span>Sign In</span>
+          </NavLink>
+        )}
 
         {/* Favorite Circular Container */}
-        <button
-          className="w-10 h-10 rounded-full bg-[#17181f] border border-white/5 flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-[#1c1e26] hover:border-white/10 transition-all duration-200"
+        <NavLink
+          to="/library"
+          className="w-10 h-10 rounded-full bg-[#17181f] border border-white/5 flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-[#1c1e26] hover:border-white/10 transition-all duration-200 shrink-0"
           title="Favorites"
         >
           <Heart size={16} />
-        </button>
+        </NavLink>
 
         {/* Settings Circular Container */}
-        <button
-          className="w-10 h-10 rounded-full bg-[#17181f] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1c1e26] hover:border-white/10 transition-all duration-200"
+        <NavLink
+          to="/profile"
+          className="w-10 h-10 rounded-full bg-[#17181f] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1c1e26] hover:border-white/10 transition-all duration-200 shrink-0"
           title="Settings"
         >
           <Settings size={16} />
-        </button>
+        </NavLink>
       </div>
     </header>
   );

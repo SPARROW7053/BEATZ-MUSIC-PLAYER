@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Users, ChevronDown, ChevronUp, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, Compass, Users, ChevronDown, ChevronUp, LogOut, ChevronLeft, ChevronRight, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ collapsed, setCollapsed, onClose }) => {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [playlistsExpanded, setPlaylistsExpanded] = useState(true);
 
   // Custom Playlists matching the image
@@ -118,6 +118,25 @@ const Sidebar = ({ collapsed, setCollapsed, onClose }) => {
           {!collapsed && <span>Artists</span>}
         </NavLink>
 
+        {/* Profile */}
+        <NavLink
+          to="/profile"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `flex items-center gap-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              collapsed ? 'justify-center w-12 h-12 mx-auto p-0' : 'px-4 w-full'
+            } ${
+              isActive
+                ? 'bg-white/10 text-white border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
+                : 'hover:text-white hover:bg-white/5'
+            }`
+          }
+          title={collapsed ? "Profile" : ""}
+        >
+          <User size={19} className="shrink-0" />
+          {!collapsed && <span>Profile</span>}
+        </NavLink>
+
         {/* Playlists Accordion (Hidden when collapsed) */}
         {!collapsed && (
           <div className="pt-6 animate-fadeIn">
@@ -150,16 +169,29 @@ const Sidebar = ({ collapsed, setCollapsed, onClose }) => {
 
       {/* Sidebar Footer */}
       <div className={`p-4 border-t border-white/5 ${collapsed ? 'flex justify-center' : ''}`}>
-        <button
-          onClick={logout}
-          className={`flex items-center gap-4 py-3.5 rounded-xl text-sm font-semibold text-gray-500 hover:text-red-400 hover:bg-red-500/5 transition-all duration-200 cursor-pointer ${
-            collapsed ? 'justify-center w-12 h-12 p-0' : 'px-4 w-full'
-          }`}
-          title={collapsed ? "Logout" : ""}
-        >
-          <LogOut size={19} className="shrink-0" />
-          {!collapsed && <span>Logout</span>}
-        </button>
+        {currentUser ? (
+          <button
+            onClick={logout}
+            className={`flex items-center gap-4 py-3.5 rounded-xl text-sm font-semibold text-gray-500 hover:text-red-400 hover:bg-red-500/5 transition-all duration-200 cursor-pointer ${
+              collapsed ? 'justify-center w-12 h-12 p-0' : 'px-4 w-full'
+            }`}
+            title={collapsed ? "Logout" : ""}
+          >
+            <LogOut size={19} className="shrink-0" />
+            {!collapsed && <span>Logout</span>}
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={`flex items-center gap-4 py-3.5 rounded-xl text-sm font-semibold text-gray-500 hover:text-[#ff9500] hover:bg-[#ff9500]/5 transition-all duration-200 cursor-pointer ${
+              collapsed ? 'justify-center w-12 h-12 p-0' : 'px-4 w-full'
+            }`}
+            title={collapsed ? "Login" : ""}
+          >
+            <LogOut size={19} className="shrink-0 rotate-180" />
+            {!collapsed && <span>Login</span>}
+          </NavLink>
+        )}
       </div>
     </aside>
   );
